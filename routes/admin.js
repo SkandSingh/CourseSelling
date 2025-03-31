@@ -1,5 +1,6 @@
-const {Router}=require("express");
-const adminRouter=Router();
+const { Router } = require("express");
+const adminRouter = Router();
+const { adminModel } = require("../db");
 
 adminRouter.post("/signup",function(req,res){
 
@@ -9,7 +10,6 @@ adminRouter.post("/login",function(req,res){
 
 })
 
-adminRouter.use()
 
 adminRouter.post("/course",function(req,res){
 
