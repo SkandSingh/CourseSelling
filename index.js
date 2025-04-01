@@ -16,7 +16,7 @@ app.use("/course", courseRouter);
 app.use("/admin", adminRouter);
 
 async function main() {
-    await mongoose.connect("");
+    await mongoose.connect("mongodb+srv://skand:alaksdfjewsjn@cluster0.32bit7y.mongodb.net/courseSelling-app");
     app.listen(3000);
 }
 main();
