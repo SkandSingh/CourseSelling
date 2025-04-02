@@ -3,11 +3,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UserModel } = require("../db");
 const { z } = require("zod");
+const {userMiddleware}=require("./middlewares/user")
 
 const userRouter = Router();
-const JWT_SECRET = "Skand123";
-
+const {JWT_USER_SECRET}= require("./config")
 userRouter.post("/signup", async function (req, res) {
+    
     const { email, password, firstName, lastName } = req.body;
 
     const user = z.object({
@@ -49,6 +50,7 @@ userRouter.post("/signup", async function (req, res) {
 
 })
 
+
 userRouter.post("/login", async function (req, res) {
     const { email, password } = req.body;
 
@@ -68,7 +70,7 @@ userRouter.post("/login", async function (req, res) {
     if (passwordMatch) {
         const token = jwt.sign({
             id: user._id.toString()
-        }, JWT_SECRET);
+        }, JWT_USER_SECRET);
         res.json({
             token: token
         })
@@ -81,6 +83,8 @@ userRouter.post("/login", async function (req, res) {
     }
 
 })
+
+userRouter.use(userMiddleware);
 
 userRouter.get("/purchases", function (req, res) {
 

@@ -4,7 +4,8 @@ const { AdminModel } = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
-const JWT_SECRET = "Skand123";
+const {JWT_Admin_SECRET} = require("./config");
+const {adminMiddleware}=require("./middlewares/admin")
 
 adminRouter.post("/signup",async function(req,res){
     const { email, password, firstName, lastName } = req.body;
@@ -27,9 +28,7 @@ adminRouter.post("/signup",async function(req,res){
         }
     
         try {
-            console.log("hello");
             const hashedPassword = await bcrypt.hash(password, 5);
-            console.log(hashedPassword);
             await AdminModel.insertOne({
                 email: email,
                 password: hashedPassword,
@@ -70,7 +69,7 @@ adminRouter.post("/login",async function(req,res){
         if (passwordMatch) {
             const token = jwt.sign({
                 id: user._id.toString()
-            }, JWT_SECRET);
+            }, JWT_Admin_SECRET);
             res.json({
                 token: token
             })
@@ -83,6 +82,7 @@ adminRouter.post("/login",async function(req,res){
         }
 })
 
+adminRouter.use(adminMiddleware);
 
 adminRouter.post("/course",function(req,res){
 
