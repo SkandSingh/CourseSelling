@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
 const {JWT_USER_SECRET}= require("../config")
 
-function userMiddleware(res,req,next){
+function userMiddleware(req,res,next){
     const token = req.headers.token;
-
     const verification = jwt.verify(token,JWT_USER_SECRET);
 
     if(verification){
         req.userId=verification.id;
+        next();
     }
     else{
         res.status(403).json({
@@ -15,7 +15,7 @@ function userMiddleware(res,req,next){
         })
         return
     }
-    next()
+    
 }
 
 module.exports={
